@@ -303,8 +303,17 @@ open.onclick = () => {
     } else {
       const note = document.createElement("p");
       note.className = "small";
-      note.textContent = "PDF abhi add nahi ki gayi.";
-      card.appendChild(note);
+     
+note.textContent = "OCM Notes and Exercises PDF available below.";
+const pdfLink = document.createElement("a");
+pdfLink.href = "ocm-notes-exercises.pdf";
+pdfLink.textContent = "Download OCM PDF";
+pdfLink.target = "_blank";
+pdfLink.rel = "noopener";
+pdfLink.className = "download";
+card.appendChild(note);
+card.appendChild(pdfLink);
+
     }
 
     list.appendChild(card);
