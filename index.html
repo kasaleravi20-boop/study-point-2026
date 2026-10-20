@@ -302,8 +302,26 @@ pdfLink.href = "https://github.com/kasaleravi20-boop/study-point-2026/raw/refs/h
       link.href = n.pdf;
       link.download = "";
       link.textContent = "link.href = "Study_Point_12th_HSC_OCM_Notes_with_Exercises.pdf";;";
-      card.appendChild(link);
-    } else {
+      
+    card.append(title, categoryText, desc, open);
+
+    const note = document.createElement("p");
+    note.className = "small";
+    note.textContent = "OCM Notes and Exercises PDF";
+
+    const pdfLink = document.createElement("a");
+    pdfLink.href = "Study_Point_12th_HSC_OCM_Notes_with_Exercises.pdf";
+    pdfLink.textContent = "Download OCM PDF";
+    pdfLink.target = "_blank";
+    pdfLink.rel = "noopener";
+    pdfLink.className = "download";
+
+    card.appendChild(note);
+    card.appendChild(pdfLink);
+
+    list.appendChild(card);
+  });
+ {
       const note = document.createElement("p");
       note.className = "small";
      
