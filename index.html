@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Point - Free Study Material</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f5fc;
+  color: #172554;
+}
+
+header {
+  background: #1746c7;
+  color: white;
+  text-align: center;
+  padding: 24px 15px;
+}
+
+header h1 { margin: 0; font-size: 34px; }
+header p { margin-bottom: 0; }
+
+nav {
+  background: white;
+  padding: 14px;
+  text-align: center;
+}
+
+nav a {
+  color: #1746c7;
+  font-weight: bold;
+  text-decoration: none;
+  margin: 0 12px;
+}
+
+.hero {
+  background: #dce7ff;
+  padding: 35px 15px;
+  text-align: center;
+}
+
+.hero h2 { font-size: 30px; }
+
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+input, select {
+  width: 100%;
+  padding: 13px;
+  margin: 8px 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px #00000010;
+}
+
+.card h3 { color: #1746c7; }
+
+button, .download {
+  display: inline-block;
+  background: #1746c7;
+  color: white;
+  border: none;
+  padding: 11px 15px;
+  margin-top: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.download { background: #087f5b; }
+
+.small {
+  color: #64748b;
+  font-size: 14px;
+}
+
+#quiz {
+  background: white;
+  padding: 22px;
+  margin-top: 35px;
+  border-radius: 14px;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #e8efff;
+  color: #172554;
+  margin: 8px 0;
+}
+
+.option.selected {
+  background: #b9ceff;
+  outline: 2px solid #1746c7;
+}
+
+#result { font-weight: bold; }
+
+footer {
+  text-align: center;
+  padding: 25px;
+  background: #172554;
+  color: white;
+  margin-top: 35px;
+}
+
+@media(max-width:500px) {
+  header h1 { font-size: 28px; }
+  .hero h2 { font-size: 24px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>📚 Study Point</h1>
+  <p>Learn Better • Score Higher</p>
+  <p>Free Study Material in Hindi & English</p>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#notes">Study Notes</a>
+  <a href="#quiz">Online Test</a>
+</nav>
+
+<section class="hero" id="home">
+  <h2>Welcome to Study Point!</h2>
+  <p>Notes, PDFs, important questions aur online tests — sab ek jagah.</p>
+  <a class="download" href="#notes">Start Learning</a>
+</section>
+
+<main>
+  <section id="notes">
+    <h2>📖 Study Material</h2>
+    <p class="small">Apni class, subject ya chapter search karo.</p>
+
+    <input id="search" type="text"
+      placeholder="Search: Maths, Accounts, Science..."
+      oninput="showNotes()">
+
+    <select id="filter" onchange="showNotes()">
+      <option value="All">All Categories</option>
+      <option value="School">School</option>
+      <option value="Commerce">Commerce</option>
+      <option value="Competitive">Competitive Exams</option>
+    </select>
+
+    <div class="grid" id="notesList"></div>
+    <p id="empty" hidden>No matching notes found.</p>
+  </section>
+
+  <section id="quiz">
+    <h2>✅ Online MCQ Test</h2>
+    <p id="question"></p>
+    <div id="options"></div>
+    <p id="result" aria-live="polite"></p>
+    <button onclick="checkAnswer()">Check Answer</button>
+    <button onclick="nextQuestion()">Next Question</button>
+    <button onclick="restartQuiz()">Restart Test</button>
+    <p id="score">Score: 0</p>
+  </section>
+</main>
+
+<footer>
+  <h3>Study Point</h3>
+  <p>Keep Learning, Keep Growing!</p>
+  <p>© <span id="year"></span> Study Point</p>
+</footer>
+
+<script>
+const notes = [
+  {
+    title: "Measures of Central Tendency",
+    category: "Competitive",
+    subject: "CA Foundation Maths",
+    desc: "Mean, Median, Mode aur important formulas.",
+    content: "MEAN = Sum of observations / Number of observations. MEDIAN = Middle value after arranging data. MODE = Most frequently occurring value.",
+    pdf: ""
+  },
+  {
+    title: "Accountancy Basics",
+    category: "Commerce",
+    subject: "Class 11 & 12",
+    desc: "Accounting equation aur basic concepts.",
+    content: "Basic Accounting Equation: Assets = Capital + Liabilities. Every transaction affects at least two accounts under double-entry bookkeeping.",
+    pdf: ""
+  },
+  {
+    title: "Functions of Management",
+    category: "Commerce",
+    subject: "Business Studies",
+    desc: "Planning, Organising, Staffing, Directing, Controlling.",
+    content: "The five main functions of management are Planning, Organising, Staffing, Directing and Controlling.",
+    pdf: ""
+  },
+  {
+    title: "English Grammar",
+    category: "School",
+    subject: "English",
+    desc: "Parts of speech aur grammar revision.",
+    content: "Common parts of speech: Noun, Pronoun, Verb, Adjective, Adverb, Preposition, Conjunction and Interjection.",
+    pdf: ""
+  },
+  {
+    title: "General Science",
+    category: "School",
+    subject: "Science",
+    desc: "Science concepts ke short revision notes.",
+    content: "Science uses observation, experiments and evidence to understand the natural world. Revise definitions, diagrams and examples from each chapter.",
+    pdf: ""
+  },
+  {
+    title: "Number Series",
+    category: "Competitive",
+    subject: "Reasoning",
+    desc: "Logical patterns aur reasoning practice.",
+    content: "Number series solve karte waqt addition, subtraction, multiplication, division, squares aur alternating patterns check karo.",
+    pdf: ""
+  }
+];
+
+function showNotes() {
+  const query = document.getElementById("search").value.toLowerCase();
+  const category = document.getElementById("filter").value;
+  const list = document.getElementById("notesList");
+
+  const filtered = notes.filter(n =>
+    (category === "All" || n.category === category) &&
+    (n.title + " " + n.subject + " " + n.desc + " " + n.category)
+      .toLowerCase().includes(query)
+  );
+
+  list.innerHTML = "";
+
+  filtered.forEach((n) => {
+    const card = document.createElement("article");
+    card.className = "card";
+
+    const title = document.createElement("h3");
+    title.textContent = n.title;
+
+    const categoryText = document.createElement("p");
+    categoryText.className = "small";
+    categoryText.textContent = n.category + " | " + n.subject;
+
+    const desc = document.createElement("p");
+    desc.textContent = n.desc;
+
+    const open = document.createElement("button");
+    open.textContent = "Open Notes";
+    open.onclick = () => alert(n.title + "\n\n" + n.content);
+
+    card.append(title, categoryText, desc, open);
+
+    if (n.pdf) {
+      const link = document.createElement("a");
+      link.className = "download";
+      link.href = n.pdf;
+      link.download = "";
+      link.textContent = "Download PDF";
+      card.appendChild(link);
+    } else {
+      const note = document.createElement("p");
+      note.className = "small";
+      note.textContent = "PDF abhi add nahi ki gayi.";
+      card.appendChild(note);
+    }
+
+    list.appendChild(card);
+  });
+
+  document.getElementById("empty").hidden = filtered.length !== 0;
+}
+
+const questions = [
+  {
+    q: "1. HTML ka use kis liye hota hai?",
+    options: ["Website structure", "Photo editing", "Gaming only", "Typing only"],
+    answer: 0
+  },
+  {
+    q: "2. Mean ka formula kya hai?",
+    options: ["Total × Count", "Sum ÷ Number of observations", "Largest value", "Smallest value"],
+    answer: 1
+  },
+  {
+    q: "3. Accounting equation kya hai?",
+    options: ["Assets = Capital + Liabilities", "Assets = Sales", "Capital = Expenses", "Liabilities = Profit"],
+    answer: 0
+  },
+  {
+    q: "4. CSS ka use kis liye hota hai?",
+    options: ["Website styling", "Typing letters only", "Calculations only", "Audio recording"],
+    answer: 0
+  },
+  {
+    q: "5. Management ka pehla main function kaunsa hai?",
+    options: ["Controlling", "Planning", "Staffing", "Directing"],
+    answer: 1
+  }
+];
+
+let current = 0;
+let selected = -1;
+let score = 0;
+let checked = false;
+
+function displayQuestion() {
+  selected = -1;
+  checked = false;
+
+  const q = questions[current];
+  document.getElementById("question").textContent =
+    "Question " + (current + 1) + " of " + questions.length + ": " + q.q;
+
+  document.getElementById("options").innerHTML = "";
+  document.getElementById("result").textContent = "";
+
+  q.options.forEach((option, index) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = String.fromCharCode(65 + index) + ". " + option;
+
+    btn.onclick = () => {
+      if (checked) return;
+      selected = index;
+      document.querySelectorAll(".option").forEach((b, i) => {
+        b.classList.toggle("selected", i === index);
+      });
+    };
+
+    document.getElementById("options").appendChild(btn);
+  });
+}
+
+function checkAnswer() {
+  if (checked) return;
+  if (selected === -1) {
+    document.getElementById("result").textContent = "Pehle ek answer select karo.";
+    return;
+  }
+
+  checked = true;
+  if (selected === questions[current].answer) {
+    score++;
+    document.getElementById("result").textContent = "Correct! Shabash 🎉";
+  } else {
+    document.getElementById("result").textContent =
+      "Incorrect. Correct answer: " +
+      questions[current].options[questions[current].answer];
+  }
+
+  document.getElementById("score").textContent =
+    "Score: " + score + " / " + (current + 1);
+}
+
+function nextQuestion() {
+  if (current < questions.length - 1) {
+    current++;
+    displayQuestion();
+  } else {
+    document.getElementById("question").textContent =
+      "Test complete! Your final score is " + score + " / " + questions.length;
+    document.getElementById("options").innerHTML = "";
+    document.getElementById("result").textContent =
+      "Restart Test par click karke dobara practice karo.";
+  }
+}
+
+function restartQuiz() {
+  current = 0;
+  selected = -1;
+  score = 0;
+  checked = false;
+  document.getElementById("score").textContent = "Score: 0";
+  displayQuestion();
+}
+
+document.getElementById("year").textContent = new Date().getFullYear();
+showNotes();
+displayQuestion();
+</script>
+
+</body>
+</html>
