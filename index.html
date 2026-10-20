@@ -274,9 +274,22 @@ function showNotes() {
     const desc = document.createElement("p");
     desc.textContent = n.desc;
 
-    const open = document.createElement("button");
-    open.textContent = "Open Notes";
-    open.onclick = () => alert(n.title + "\n\n" + n.content);
+    
+
+const open = document.createElement("button");
+open.textContent = "Open Notes";
+
+open.onclick = () => {
+  if (
+    n.title &&
+    n.title.toLowerCase().includes("ocm")
+  ) {
+    window.open("ocm-notes-exercises.pdf", "_blank");
+  } else {
+    alert(n.title + "\n\n" + n.content);
+  }
+};
+
 
     card.append(title, categoryText, desc, open);
 
