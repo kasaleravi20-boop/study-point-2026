@@ -284,7 +284,9 @@ open.onclick = () => {
     n.title &&
     n.title.toLowerCase().includes("ocm")
   ) {
-    window.open("ocm-notes-exercises.pdf", "_blank");
+    
+pdfLink.href = "Study_Point_12th_HSC_OCM_Notes_with_Exercises.pdf";
+
   } else {
     alert(n.title + "\n\n" + n.content);
   }
